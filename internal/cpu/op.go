@@ -16,7 +16,7 @@ func Op(rb []byte, pc int64) (string, int64) {
 
 	// Build the output.
 	var sb strings.Builder
-	sb.WriteString(fmt.Sprintf("HEX: 0x%02X ASM: ", opc))
+	sb.WriteString(fmt.Sprintf("%04x ", pc))
 
 	var (
 		asm string
@@ -27,7 +27,7 @@ func Op(rb []byte, pc int64) (string, int64) {
 		asm, opb = d(rb, pc)
 		sb.WriteString(asm)
 	} else {
-		sb.WriteString("UNKNOWN")
+		sb.WriteString(fmt.Sprintf("OPCODE: %x UNKNOWN", opc))
 	}
 
 	return sb.String(), opb

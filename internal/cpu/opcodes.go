@@ -13,291 +13,301 @@ type disassembler func([]byte, int64) (string, int64)
 
 var disassemblers = map[byte]disassembler{
 	0x00: nop,
-	0x01: lxi,
-	0x02: staxB,
-	0x03: inxB,
-	0x04: inrB,
-	0x05: dcrB,
-	0x06: mviB,
+	0x01: lxi("B"),
+	0x02: stax("B"),
+	0x03: inx("B"),
+	0x04: inr("B"),
+	0x05: dcr("B"),
+	0x06: mvi("B"),
 	0x07: rlc,
-	0x08: nop,
+	0x08: ignore,
+	0x09: dad("B"),
+	0x0a: ldax("B"),
+	0x0b: dcx("B"),
+	0x0c: inr("C"),
+	0x0d: dcr("C"),
+	0x0e: mvi("C"),
+	0x0f: rrc,
+	0x10: ignore,
+	0x11: lxi("D"),
+	0x12: stax("D"),
+	0x13: inx("D"),
+	0x14: inr("D"),
+	0x15: dcr("D"),
+	0x16: mvi("D"),
+	0x17: ral,
+	0x18: ignore,
+	0x19: dad("D"),
+	0x1a: ldax("D"),
+	0x1b: dcx("D"),
+	0x1c: inr("E"),
+	0x1d: dcr("E"),
+	0x1e: mvi("E"),
+	0x1f: rar,
+	0x20: rim,
+	0x21: lxi("H"),
+	0x22: shld,
+	0x23: inx("H"),
+	0x24: inr("H"),
+	0x25: dcr("H"),
+	0x26: mvi("H"),
+	0x27: daa,
+	0x28: ignore,
+	0x29: dad("H"),
+	0x2a: lhld,
+	0x2b: dcx("H"),
+	0x2c: inr("L"),
+	0x2d: dcr("L"),
+	0x2e: mvi("L"),
+	0x2f: cma,
+	0x30: sim,
+	0x31: lxi("SP"),
+	0x32: sta,
+	0x33: inx("SP"),
+	0x34: inr("M"),
+	0x35: dcr("M"),
+	0x36: mvi("M"),
+	0x37: stc,
+	0x38: ignore,
+	0x39: dad("SP"),
+	0x3a: lda,
+	0x3b: dcx("SP"),
+	0x3c: inr("A"),
+	0x3d: dcr("A"),
+	0x3e: mvi("A"),
+	0x3f: cmc,
+	0x40: mov("B", "B"),
+	0x41: mov("B", "C"),
+	0x42: mov("B", "D"),
+	0x43: mov("B", "E"),
+	0x44: mov("B", "H"),
+	0x45: mov("B", "L"),
+	0x46: mov("B", "M"),
+	0x47: mov("B", "A"),
+	0x48: mov("C", "B"),
+	0x49: mov("C", "C"),
+	0x4a: mov("C", "D"),
+	0x4b: mov("C", "E"),
+	0x4c: mov("C", "H"),
+	0x4d: mov("C", "L"),
+	0x4e: mov("C", "M"),
+	0x4f: mov("C", "A"),
+	0x50: mov("D", "B"),
+	0x51: mov("D", "C"),
+	0x52: mov("D", "D"),
+	0x53: mov("D", "E"),
+	0x54: mov("D", "H"),
+	0x55: mov("D", "L"),
+	0x56: mov("D", "M"),
+	0x57: mov("D", "A"),
+	0x58: mov("E", "B"),
+	0x59: mov("E", "C"),
+	0x5a: mov("E", "D"),
+	0x5b: mov("E", "E"),
+	0x5c: mov("E", "H"),
+	0x5d: mov("E", "L"),
+	0x5e: mov("E", "M"),
+	0x5f: mov("E", "A"),
+	0x60: mov("H", "B"),
+	0x61: mov("H", "C"),
+	0x62: mov("H", "D"),
+	0x63: mov("H", "E"),
+	0x64: mov("H", "H"),
+	0x65: mov("H", "L"),
+	0x66: mov("H", "M"),
+	0x67: mov("H", "A"),
+	0x68: mov("L", "B"),
+	0x69: mov("L", "C"),
+	0x6a: mov("L", "D"),
+	0x6b: mov("L", "E"),
+	0x6c: mov("L", "H"),
+	0x6d: mov("L", "L"),
+	0x6e: mov("L", "M"),
+	0x6f: mov("L", "A"),
+	0x70: mov("M", "B"),
+	0x71: mov("M", "C"),
+	0x72: mov("M", "D"),
+	0x73: mov("M", "E"),
+	0x74: mov("M", "H"),
+	0x75: mov("M", "L"),
+	0x76: hlt,
+	0x77: mov("M", "A"),
+	0x78: mov("A", "B"),
+	0x79: mov("A", "C"),
+	0x7a: mov("A", "D"),
+	0x7b: mov("A", "E"),
+	0x7c: mov("A", "H"),
+	0x7d: mov("A", "L"),
+	0x7e: mov("A", "M"),
+	0x7f: mov("A", "A"),
+	0x80: add("B"),
+	0x81: add("C"),
+	0x82: add("D"),
+	0x83: add("E"),
+	0x84: add("H"),
+	0x85: add("L"),
+	0x86: add("M"),
+	0x87: add("A"),
+	0x88: adc("B"),
+	0x89: adc("C"),
+	0x8a: adc("D"),
+	0x8b: adc("E"),
+	0x8c: adc("H"),
+	0x8d: adc("L"),
+	0x8e: adc("M"),
+	0x8f: adc("A"),
+	0x90: sub("B"),
+	0x91: sub("C"),
+	0x92: sub("D"),
+	0x93: sub("E"),
+	0x94: sub("H"),
+	0x95: sub("L"),
+	0x96: sub("M"),
+	0x97: sub("A"),
+	0x98: sbb("B"),
+	0x99: sbb("C"),
+	0x9a: sbb("D"),
+	0x9b: sbb("E"),
+	0x9c: sbb("H"),
+	0x9d: sbb("L"),
+	0x9e: sbb("M"),
+	0x9f: sbb("A"),
+	0xa0: ana("B"),
+	0xa1: ana("C"),
+	0xa2: ana("D"),
+	0xa3: ana("E"),
+	0xa4: ana("H"),
+	0xa5: ana("L"),
+	0xa6: ana("M"),
+	0xa7: ana("A"),
+	0xa8: xra("B"),
+	0xa9: xra("C"),
+	0xaa: xra("D"),
+	0xab: xra("E"),
+	0xac: xra("H"),
+	0xad: xra("L"),
+	0xae: xra("M"),
+	0xaf: xra("A"),
+	0xb0: ora("B"),
+	0xb1: ora("C"),
+	0xb2: ora("D"),
+	0xb3: ora("E"),
+	0xb4: ora("H"),
+	0xb5: ora("L"),
+	0xb6: ora("M"),
+	0xb7: ora("A"),
+	0xb8: cmp("B"),
+	0xb9: cmp("C"),
+	0xba: cmp("D"),
+	0xbb: cmp("E"),
+	0xbc: cmp("H"),
+	0xbd: cmp("L"),
+	0xbe: cmp("M"),
+	0xbf: cmp("A"),
+	0xc0: rnz,
+	0xc1: pop("B"),
+	0xc2: jnz,
 	0xc3: jmp,
-	0xf5: pushPSW,
+	0xc4: cnz,
+	0xc5: push("B"),
+	0xc6: adi,
+	0xc7: rst(0),
+	0xc8: rz,
+	0xc9: ret,
+	0xca: jz,
+	0xcb: ignore,
+	0xcc: cz,
+	0xcd: call,
+	0xce: aci,
+	0xcf: rst(1),
+	0xd0: rnc,
+	0xd1: pop("D"),
+	0xd2: jnc,
+	0xd3: out,
+	0xd4: cnc,
+	0xd5: push("D"),
+	0xd6: sui,
+	0xd7: rst(2),
+	0xd8: rc,
+	0xd9: ignore,
+	0xda: jc,
+	0xdb: in,
+	0xdc: cc,
+	0xdd: ignore,
+	0xde: sbi,
+	0xdf: rst(3),
+	0xe0: rpo,
+	0xe1: pop("H"),
+	0xe2: jpo,
+	0xe3: xthl,
+	0xe4: cpo,
+	0xe5: push("H"),
+	0xe6: ani,
+	0xe7: rst(4),
+	0xe8: rpe,
+	0xe9: pchl,
+	0xea: jpe,
+	0xeb: xchg,
+	0xec: cpe,
+	0xed: ignore,
+	0xee: xri,
+	0xef: rst(5),
+	0xf0: rp,
+	0xf1: pop("PSW"),
+	0xf2: jp,
+	0xf3: di,
+	0xf4: cp,
+	0xf5: push("PSW"),
+	0xf6: ori,
+	0xf7: rst(6),
+	0xf8: rm,
+	0xf9: sphl,
+	0xfa: jm,
+	0xfb: ei,
+	0xfc: cm,
+	0xfd: ignore,
+	0xfe: cpi,
+	0xff: rst(7),
 }
-
-// TODO:
-//0x09 	DAD B	1	CY	HL = HL + BC
-//0x0a 	LDAX B	1		A <- (BC)
-//0x0b 	DCX B	1		BC = BC-1
-//0x0c 	INR C	1	Z, S, P, AC	C <- C+1
-//0x0d 	DCR C	1	Z, S, P, AC	C <-C-1
-//0x0e 	MVI C,D8	2		C <- byte 2
-//0x0f 	RRC	1	CY	A = A >> 1; bit 7 = prev bit 0; CY = prev bit 0
-//0x10 	-
-//0x11 	LXI D,D16	3		D <- byte 3, E <- byte 2
-//0x12 	STAX D	1		(DE) <- A
-//0x13 	INX D	1		DE <- DE + 1
-//0x14 	INR D	1	Z, S, P, AC	D <- D+1
-//0x15 	DCR D	1	Z, S, P, AC	D <- D-1
-//0x16 	MVI D, D8	2		D <- byte 2
-//0x17 	RAL	1	CY	A = A << 1; bit 0 = prev CY; CY = prev bit 7
-//0x18 	-
-//0x19 	DAD D	1	CY	HL = HL + DE
-//0x1a 	LDAX D	1		A <- (DE)
-//0x1b 	DCX D	1		DE = DE-1
-//0x1c 	INR E	1	Z, S, P, AC	E <-E+1
-//0x1d 	DCR E	1	Z, S, P, AC	E <- E-1
-//0x1e 	MVI E,D8	2		E <- byte 2
-//0x1f 	RAR	1	CY	A = A >> 1; bit 7 = prev bit 7; CY = prev bit 0
-//0x20 	RIM	1		special
-//0x21 	LXI H,D16	3		H <- byte 3, L <- byte 2
-//0x22 	SHLD adr	3		(adr) <-L; (adr+1)<-H
-//0x23 	INX H	1		HL <- HL + 1
-//0x24 	INR H	1	Z, S, P, AC	H <- H+1
-//0x25 	DCR H	1	Z, S, P, AC	H <- H-1
-//0x26 	MVI H,D8	2		L <- byte 2
-//0x27 	DAA	1		special
-//0x28 	-
-//0x29 	DAD H	1	CY	HL = HL + HI
-//0x2a 	LHLD adr	3		L <- (adr); H<-(adr+1)
-//0x2b 	DCX H	1		HL = HL-1
-//0x2c 	INR L	1	Z, S, P, AC	L <- L+1
-//0x2d 	DCR L	1	Z, S, P, AC	L <- L-1
-//0x2e 	MVI L, D8	2		L <- byte 2
-//0x2f 	CMA	1		A <- !A
-//0x30 	SIM	1		special
-//0x31 	LXI SP, D16	3		SP.hi <- byte 3, SP.lo <- byte 2
-//0x32 	STA adr	3		(adr) <- A
-//0x33 	INX SP	1		SP = SP + 1
-//0x34 	INR M	1	Z, S, P, AC	(HL) <- (HL)+1
-//0x35 	DCR M	1	Z, S, P, AC	(HL) <- (HL)-1
-//0x36 	MVI M,D8	2		(HL) <- byte 2
-//0x37 	STC	1	CY	CY = 1
-//0x38 	-
-//0x39 	DAD SP	1	CY	HL = HL + SP
-//0x3a 	LDA adr	3		A <- (adr)
-//0x3b 	DCX SP	1		SP = SP-1
-//0x3c 	INR A	1	Z, S, P, AC	A <- A+1
-//0x3d 	DCR A	1	Z, S, P, AC	A <- A-1
-//0x3e 	MVI A,D8	2		A <- byte 2
-//0x3f 	CMC	1	CY	CY=!CY
-//0x40 	MOV B,B	1		B <- B
-//0x41 	MOV B,C	1		B <- C
-//0x42 	MOV B,D	1		B <- D
-//0x43 	MOV B,E	1		B <- E
-//0x44 	MOV B,H	1		B <- H
-//0x45 	MOV B,L	1		B <- L
-//0x46 	MOV B,M	1		B <- (HL)
-//0x47 	MOV B,A	1		B <- A
-//0x48 	MOV C,B	1		C <- B
-//0x49 	MOV C,C	1		C <- C
-//0x4a 	MOV C,D	1		C <- D
-//0x4b 	MOV C,E	1		C <- E
-//0x4c 	MOV C,H	1		C <- H
-//0x4d 	MOV C,L	1		C <- L
-//0x4e 	MOV C,M	1		C <- (HL)
-//0x4f 	MOV C,A	1		C <- A
-//0x50 	MOV D,B	1		D <- B
-//0x51 	MOV D,C	1		D <- C
-//0x52 	MOV D,D	1		D <- D
-//0x53 	MOV D,E	1		D <- E
-//0x54 	MOV D,H	1		D <- H
-//0x55 	MOV D,L	1		D <- L
-//0x56 	MOV D,M	1		D <- (HL)
-//0x57 	MOV D,A	1		D <- A
-//0x58 	MOV E,B	1		E <- B
-//0x59 	MOV E,C	1		E <- C
-//0x5a 	MOV E,D	1		E <- D
-//0x5b 	MOV E,E	1		E <- E
-//0x5c 	MOV E,H	1		E <- H
-//0x5d 	MOV E,L	1		E <- L
-//0x5e 	MOV E,M	1		E <- (HL)
-//0x5f 	MOV E,A	1		E <- A
-//0x60 	MOV H,B	1		H <- B
-//0x61 	MOV H,C	1		H <- C
-//0x62 	MOV H,D	1		H <- D
-//0x63 	MOV H,E	1		H <- E
-//0x64 	MOV H,H	1		H <- H
-//0x65 	MOV H,L	1		H <- L
-//0x66 	MOV H,M	1		H <- (HL)
-//0x67 	MOV H,A	1		H <- A
-//0x68 	MOV L,B	1		L <- B
-//0x69 	MOV L,C	1		L <- C
-//0x6a 	MOV L,D	1		L <- D
-//0x6b 	MOV L,E	1		L <- E
-//0x6c 	MOV L,H	1		L <- H
-//0x6d 	MOV L,L	1		L <- L
-//0x6e 	MOV L,M	1		L <- (HL)
-//0x6f 	MOV L,A	1		L <- A
-//0x70 	MOV M,B	1		(HL) <- B
-//0x71 	MOV M,C	1		(HL) <- C
-//0x72 	MOV M,D	1		(HL) <- D
-//0x73 	MOV M,E	1		(HL) <- E
-//0x74 	MOV M,H	1		(HL) <- H
-//0x75 	MOV M,L	1		(HL) <- L
-//0x76 	HLT	1		special
-//0x77 	MOV M,A	1		(HL) <- C
-//0x78 	MOV A,B	1		A <- B
-//0x79 	MOV A,C	1		A <- C
-//0x7a 	MOV A,D	1		A <- D
-//0x7b 	MOV A,E	1		A <- E
-//0x7c 	MOV A,H	1		A <- H
-//0x7d 	MOV A,L	1		A <- L
-//0x7e 	MOV A,M	1		A <- (HL)
-//0x7f 	MOV A,A	1		A <- A
-//0x80 	ADD B	1	Z, S, P, CY, AC	A <- A + B
-//0x81 	ADD C	1	Z, S, P, CY, AC	A <- A + C
-//0x82 	ADD D	1	Z, S, P, CY, AC	A <- A + D
-//0x83 	ADD E	1	Z, S, P, CY, AC	A <- A + E
-//0x84 	ADD H	1	Z, S, P, CY, AC	A <- A + H
-//0x85 	ADD L	1	Z, S, P, CY, AC	A <- A + L
-//0x86 	ADD M	1	Z, S, P, CY, AC	A <- A + (HL)
-//0x87 	ADD A	1	Z, S, P, CY, AC	A <- A + A
-//0x88 	ADC B	1	Z, S, P, CY, AC	A <- A + B + CY
-//0x89 	ADC C	1	Z, S, P, CY, AC	A <- A + C + CY
-//0x8a 	ADC D	1	Z, S, P, CY, AC	A <- A + D + CY
-//0x8b 	ADC E	1	Z, S, P, CY, AC	A <- A + E + CY
-//0x8c 	ADC H	1	Z, S, P, CY, AC	A <- A + H + CY
-//0x8d 	ADC L	1	Z, S, P, CY, AC	A <- A + L + CY
-//0x8e 	ADC M	1	Z, S, P, CY, AC	A <- A + (HL) + CY
-//0x8f 	ADC A	1	Z, S, P, CY, AC	A <- A + A + CY
-//0x90 	SUB B	1	Z, S, P, CY, AC	A <- A - B
-//0x91 	SUB C	1	Z, S, P, CY, AC	A <- A - C
-//0x92 	SUB D	1	Z, S, P, CY, AC	A <- A + D
-//0x93 	SUB E	1	Z, S, P, CY, AC	A <- A - E
-//0x94 	SUB H	1	Z, S, P, CY, AC	A <- A + H
-//0x95 	SUB L	1	Z, S, P, CY, AC	A <- A - L
-//0x96 	SUB M	1	Z, S, P, CY, AC	A <- A + (HL)
-//0x97 	SUB A	1	Z, S, P, CY, AC	A <- A - A
-//0x98 	SBB B	1	Z, S, P, CY, AC	A <- A - B - CY
-//0x99 	SBB C	1	Z, S, P, CY, AC	A <- A - C - CY
-//0x9a 	SBB D	1	Z, S, P, CY, AC	A <- A - D - CY
-//0x9b 	SBB E	1	Z, S, P, CY, AC	A <- A - E - CY
-//0x9c 	SBB H	1	Z, S, P, CY, AC	A <- A - H - CY
-//0x9d 	SBB L	1	Z, S, P, CY, AC	A <- A - L - CY
-//0x9e 	SBB M	1	Z, S, P, CY, AC	A <- A - (HL) - CY
-//0x9f 	SBB A	1	Z, S, P, CY, AC	A <- A - A - CY
-//0xa0 	ANA B	1	Z, S, P, CY, AC	A <- A & B
-//0xa1 	ANA C	1	Z, S, P, CY, AC	A <- A & C
-//0xa2 	ANA D	1	Z, S, P, CY, AC	A <- A & D
-//0xa3 	ANA E	1	Z, S, P, CY, AC	A <- A & E
-//0xa4 	ANA H	1	Z, S, P, CY, AC	A <- A & H
-//0xa5 	ANA L	1	Z, S, P, CY, AC	A <- A & L
-//0xa6 	ANA M	1	Z, S, P, CY, AC	A <- A & (HL)
-//0xa7 	ANA A	1	Z, S, P, CY, AC	A <- A & A
-//0xa8 	XRA B	1	Z, S, P, CY, AC	A <- A ^ B
-//0xa9 	XRA C	1	Z, S, P, CY, AC	A <- A ^ C
-//0xaa 	XRA D	1	Z, S, P, CY, AC	A <- A ^ D
-//0xab 	XRA E	1	Z, S, P, CY, AC	A <- A ^ E
-//0xac 	XRA H	1	Z, S, P, CY, AC	A <- A ^ H
-//0xad 	XRA L	1	Z, S, P, CY, AC	A <- A ^ L
-//0xae 	XRA M	1	Z, S, P, CY, AC	A <- A ^ (HL)
-//0xaf 	XRA A	1	Z, S, P, CY, AC	A <- A ^ A
-//0xb0 	ORA B	1	Z, S, P, CY, AC	A <- A | B
-//0xb1 	ORA C	1	Z, S, P, CY, AC	A <- A | C
-//0xb2 	ORA D	1	Z, S, P, CY, AC	A <- A | D
-//0xb3 	ORA E	1	Z, S, P, CY, AC	A <- A | E
-//0xb4 	ORA H	1	Z, S, P, CY, AC	A <- A | H
-//0xb5 	ORA L	1	Z, S, P, CY, AC	A <- A | L
-//0xb6 	ORA M	1	Z, S, P, CY, AC	A <- A | (HL)
-//0xb7 	ORA A	1	Z, S, P, CY, AC	A <- A | A
-//0xb8 	CMP B	1	Z, S, P, CY, AC	A - B
-//0xb9 	CMP C	1	Z, S, P, CY, AC	A - C
-//0xba 	CMP D	1	Z, S, P, CY, AC	A - D
-//0xbb 	CMP E	1	Z, S, P, CY, AC	A - E
-//0xbc 	CMP H	1	Z, S, P, CY, AC	A - H
-//0xbd 	CMP L	1	Z, S, P, CY, AC	A - L
-//0xbe 	CMP M	1	Z, S, P, CY, AC	A - (HL)
-//0xbf 	CMP A	1	Z, S, P, CY, AC	A - A
-//0xc0 	RNZ	1		if NZ, RET
-//0xc1 	POP B	1		C <- (sp); B <- (sp+1); sp <- sp+2
-//0xc2 	JNZ adr	3		if NZ, PC <- adr
-//0xc4 	CNZ adr	3		if NZ, CALL adr
-//0xc5 	PUSH B	1		(sp-2)<-C; (sp-1)<-B; sp <- sp - 2
-//0xc6 	ADI D8	2	Z, S, P, CY, AC	A <- A + byte
-//0xc7 	RST 0	1		CALL $0
-//0xc8 	RZ	1		if Z, RET
-//0xc9 	RET	1		PC.lo <- (sp); PC.hi<-(sp+1); SP <- SP+2
-//0xca 	JZ adr	3		if Z, PC <- adr
-//0xcb 	-
-//0xcc 	CZ adr	3		if Z, CALL adr
-//0xcd 	CALL adr	3		(SP-1)<-PC.hi;(SP-2)<-PC.lo;SP<-SP+2;PC=adr
-//0xce 	ACI D8	2	Z, S, P, CY, AC	A <- A + data + CY
-//0xcf 	RST 1	1		CALL $8
-//0xd0 	RNC	1		if NCY, RET
-//0xd1 	POP D	1		E <- (sp); D <- (sp+1); sp <- sp+2
-//0xd2 	JNC adr	3		if NCY, PC<-adr
-//0xd3 	OUT D8	2		special
-//0xd4 	CNC adr	3		if NCY, CALL adr
-//0xd5 	PUSH D	1		(sp-2)<-E; (sp-1)<-D; sp <- sp - 2
-//0xd6 	SUI D8	2	Z, S, P, CY, AC	A <- A - data
-//0xd7 	RST 2	1		CALL $10
-//0xd8 	RC	1		if CY, RET
-//0xd9 	-
-//0xda 	JC adr	3		if CY, PC<-adr
-//0xdb 	IN D8	2		special
-//0xdc 	CC adr	3		if CY, CALL adr
-//0xdd 	-
-//0xde 	SBI D8	2	Z, S, P, CY, AC	A <- A - data - CY
-//0xdf 	RST 3	1		CALL $18
-//0xe0 	RPO	1		if PO, RET
-//0xe1 	POP H	1		L <- (sp); H <- (sp+1); sp <- sp+2
-//0xe2 	JPO adr	3		if PO, PC <- adr
-//0xe3 	XTHL	1		L <-> (SP); H <-> (SP+1)
-//0xe4 	CPO adr	3		if PO, CALL adr
-//0xe5 	PUSH H	1		(sp-2)<-L; (sp-1)<-H; sp <- sp - 2
-//0xe6 	ANI D8	2	Z, S, P, CY, AC	A <- A & data
-//0xe7 	RST 4	1		CALL $20
-//0xe8 	RPE	1		if PE, RET
-//0xe9 	PCHL	1		PC.hi <- H; PC.lo <- L
-//0xea 	JPE adr	3		if PE, PC <- adr
-//0xeb 	XCHG	1		H <-> D; L <-> E
-//0xec 	CPE adr	3		if PE, CALL adr
-//0xed 	-
-//0xee 	XRI D8	2	Z, S, P, CY, AC	A <- A ^ data
-//0xef 	RST 5	1		CALL $28
-//0xf0 	RP	1		if P, RET
-//0xf1 	POP PSW	1		flags <- (sp); A <- (sp+1); sp <- sp+2
-//0xf2 	JP adr	3		if P=1 PC <- adr
-//0xf3 	DI	1		special
-//0xf4 	CP adr	3		if P, PC <- adr
-//0xf6 	ORI D8	2	Z, S, P, CY, AC	A <- A | data
-//0xf7 	RST 6	1		CALL $30
-//0xf8 	RM	1		if M, RET
-//0xf9 	SPHL	1		SP=HL
-//0xfa 	JM adr	3		if M, PC <- adr
-//0xfb 	EI	1		special
-//0xfc 	CM adr	3		if M, CALL adr
-//0xfd 	-
-//0xfe 	CPI D8	2	Z, S, P, CY, AC	A - data
-//0xff 	RST 7	1		CALL $38
 
 func nop(rb []byte, pc int64) (string, int64) {
 	return "NOP", defaultOpBytes
 }
 
-func lxi(rb []byte, pc int64) (string, int64) {
-	return fmt.Sprintf("LXI B,#$%02X%02X", rb[pc+2], rb[pc+1]), 3
+func lxi(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return fmt.Sprintf("LXI %s,#$%02X%02X", r, rb[pc+2], rb[pc+1]), 3
+	}
 }
 
-func staxB(rb []byte, pc int64) (string, int64) {
-	return "STAX B", defaultOpBytes
+func stax(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return "STAX " + r, defaultOpBytes
+	}
 }
 
-func inxB(rb []byte, pc int64) (string, int64) {
-	return "INX B", defaultOpBytes
+func inx(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return "INX " + r, defaultOpBytes
+	}
 }
 
-func inrB(rb []byte, pc int64) (string, int64) {
-	return "INR B", defaultOpBytes
+func inr(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return "INR " + r, defaultOpBytes
+	}
 }
 
-func dcrB(rb []byte, pc int64) (string, int64) {
-	return "DCR B", defaultOpBytes
+func dcr(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return "DCR " + r, defaultOpBytes
+	}
 }
 
-func mviB(rb []byte, pc int64) (string, int64) {
-	return fmt.Sprintf("MVI B,#$%02X", rb[pc+1]), 2
+func mvi(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return fmt.Sprintf("MVI %s,#$%02X", r, rb[pc+1]), 2
+	}
 }
 
 func rlc(rb []byte, pc int64) (string, int64) {
@@ -308,6 +318,320 @@ func jmp(rb []byte, pc int64) (string, int64) {
 	return fmt.Sprintf("JMP $%02X%02X", rb[pc+2], rb[pc+1]), 3
 }
 
-func pushPSW(rb []byte, pc int64) (string, int64) {
-	return "PUSH PSW", defaultOpBytes
+func push(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return "PUSH " + r, defaultOpBytes
+	}
+}
+
+func ignore(rb []byte, pc int64) (string, int64) {
+	return "-", defaultOpBytes
+}
+
+func dad(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return "DAD " + r, defaultOpBytes
+	}
+}
+
+func ldax(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return "LDAX " + r, defaultOpBytes
+	}
+}
+
+func dcx(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return "DCX " + r, defaultOpBytes
+	}
+}
+
+func rrc(rb []byte, pc int64) (string, int64) {
+	return "RRC", defaultOpBytes
+}
+
+func ral(rb []byte, pc int64) (string, int64) {
+	return "RAL", defaultOpBytes
+}
+
+func rar(rb []byte, pc int64) (string, int64) {
+	return "RAR", defaultOpBytes
+}
+
+func rim(rb []byte, pc int64) (string, int64) {
+	return "RIM", defaultOpBytes
+}
+
+func shld(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("SHLD $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func daa(rb []byte, pc int64) (string, int64) {
+	return "DAA", defaultOpBytes
+}
+
+func lhld(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("LHLD $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func cma(rb []byte, pc int64) (string, int64) {
+	return "CMA", defaultOpBytes
+}
+
+func sim(rb []byte, pc int64) (string, int64) {
+	return "SIM", defaultOpBytes
+}
+
+func sta(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("STA $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func stc(rb []byte, pc int64) (string, int64) {
+	return "STC", defaultOpBytes
+}
+
+func lda(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("LDA $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func cmc(rb []byte, pc int64) (string, int64) {
+	return "CMC", defaultOpBytes
+}
+
+func mov(dst, src string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return fmt.Sprintf("MOV %s,%s", dst, src), defaultOpBytes
+	}
+}
+
+func hlt(rb []byte, pc int64) (string, int64) {
+	return "HLT", defaultOpBytes
+}
+
+func add(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return "ADD " + r, defaultOpBytes
+	}
+}
+
+func adc(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return "ADC " + r, defaultOpBytes
+	}
+}
+
+func sub(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return "SUB " + r, defaultOpBytes
+	}
+}
+
+func sbb(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return "SBB " + r, defaultOpBytes
+	}
+}
+
+func ana(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return "ANA " + r, defaultOpBytes
+	}
+}
+
+func xra(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return "XRA " + r, defaultOpBytes
+	}
+}
+
+func ora(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return "ORA " + r, defaultOpBytes
+	}
+}
+
+func cmp(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return "CMP " + r, defaultOpBytes
+	}
+}
+
+func rnz(rb []byte, pc int64) (string, int64) {
+	return "RNZ", defaultOpBytes
+}
+
+func pop(r string) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return "POP " + r, defaultOpBytes
+	}
+}
+
+func jnz(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("JNZ $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func cnz(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("CNZ $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func adi(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("ADI #$%02X", rb[pc+1]), 2
+}
+
+func rst(i int) disassembler {
+	return func(rb []byte, pc int64) (string, int64) {
+		return fmt.Sprintf("RST %d", i), defaultOpBytes
+	}
+}
+
+func rz(rb []byte, pc int64) (string, int64) {
+	return "RZ", defaultOpBytes
+}
+
+func ret(rb []byte, pc int64) (string, int64) {
+	return "RET", defaultOpBytes
+}
+
+func jz(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("JZ $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func cz(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("CZ $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func call(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("CALL $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func aci(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("ACI #$%02X", rb[pc+1]), 2
+}
+
+func rnc(rb []byte, pc int64) (string, int64) {
+	return "RNC", defaultOpBytes
+}
+
+func jnc(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("JNC $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func out(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("OUT #$%02X", rb[pc+1]), 2
+}
+
+func cnc(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("CNC $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func sui(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("SUI #$%02X", rb[pc+1]), 2
+}
+
+func rc(rb []byte, pc int64) (string, int64) {
+	return "RC", defaultOpBytes
+}
+
+func jc(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("JC $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func in(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("IN #$%02X", rb[pc+1]), 2
+}
+
+func cc(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("CC $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func sbi(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("SBI #$%02X", rb[pc+1]), 2
+}
+
+func rpo(rb []byte, pc int64) (string, int64) {
+	return "RPO", defaultOpBytes
+}
+
+func jpo(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("JPO $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func xthl(rb []byte, pc int64) (string, int64) {
+	return "XTHL", defaultOpBytes
+}
+
+func cpo(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("CPO $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func ani(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("ANI #$%02X", rb[pc+1]), 2
+}
+
+func rpe(rb []byte, pc int64) (string, int64) {
+	return "RPE", defaultOpBytes
+}
+
+func pchl(rb []byte, pc int64) (string, int64) {
+	return "PCHL", defaultOpBytes
+}
+
+func jpe(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("JPE $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func xchg(rb []byte, pc int64) (string, int64) {
+	return "XCHG", defaultOpBytes
+}
+
+func cpe(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("CPE $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func xri(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("XRI #$%02X", rb[pc+1]), 2
+}
+
+func rp(rb []byte, pc int64) (string, int64) {
+	return "RP", defaultOpBytes
+}
+
+func jp(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("JP $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func di(rb []byte, pc int64) (string, int64) {
+	return "DI", defaultOpBytes
+}
+
+func cp(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("CP $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func ori(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("ORI #$%02X", rb[pc+1]), 2
+}
+
+func rm(rb []byte, pc int64) (string, int64) {
+	return "RM", defaultOpBytes
+}
+
+func sphl(rb []byte, pc int64) (string, int64) {
+	return "SPHL", defaultOpBytes
+}
+
+func jm(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("JM $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func ei(rb []byte, pc int64) (string, int64) {
+	return "EI", defaultOpBytes
+}
+
+func cm(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("CM $%02X%02X", rb[pc+2], rb[pc+1]), 3
+}
+
+func cpi(rb []byte, pc int64) (string, int64) {
+	return fmt.Sprintf("CPI #$%02X", rb[pc+1]), 2
 }
