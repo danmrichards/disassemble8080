@@ -5,11 +5,11 @@ import (
 	"strings"
 )
 
-// Disassemble returns a string representing the assembler for the current
-// opcode and the number of bytes the op takes.
+// Disassemble returns a string representing the assembly code for the current
+// opcode and the length of the relevant instruction.
 //
 // The opcode is determined by reading the bytes indicated by the given program
-// counter from the given rom bytes.
+// counter from the given ROM bytes.
 func Disassemble(rb []byte, pc int64) (string, int64) {
 	// Get the opcode.
 	opc := rb[pc]

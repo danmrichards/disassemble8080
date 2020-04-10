@@ -6,7 +6,8 @@ import (
 	"github.com/danmrichards/disassemble8080/pkg/dasm"
 )
 
-// Disassemble iterates over the given ROM bytes and prints out the resulting assembly code.
+// Disassemble iterates over the given ROM bytes and prints out the resulting
+// assembly code.
 func Disassemble(rb []byte) {
 	var pc int64
 	for pc < int64(len(rb)) {

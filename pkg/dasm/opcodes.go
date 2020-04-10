@@ -2,12 +2,12 @@ package dasm
 
 import "fmt"
 
-const defaultOpBytes = 1
+const defaultInstructionLen = 1
 
-// disassembler is a function that returns the relevant assembly code and bytes
-// for the operation.
+// disassembler is a function that returns the relevant assembly code and length
+// of the instruction.
 //
-// Assembly and return bytes are calculated from the given ROM bytes and
+// Assembly and instruction length are calculated from the given ROM bytes and
 // program counter.
 type disassembler func([]byte, int64) (string, int64)
 
@@ -271,7 +271,7 @@ var disassemblers = map[byte]disassembler{
 }
 
 func nop(rb []byte, pc int64) (string, int64) {
-	return "NOP", defaultOpBytes
+	return "NOP", defaultInstructionLen
 }
 
 func lxi(r string) disassembler {
@@ -282,25 +282,25 @@ func lxi(r string) disassembler {
 
 func stax(r string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return "STAX " + r, defaultOpBytes
+		return "STAX " + r, defaultInstructionLen
 	}
 }
 
 func inx(r string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return "INX " + r, defaultOpBytes
+		return "INX " + r, defaultInstructionLen
 	}
 }
 
 func inr(r string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return "INR " + r, defaultOpBytes
+		return "INR " + r, defaultInstructionLen
 	}
 }
 
 func dcr(r string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return "DCR " + r, defaultOpBytes
+		return "DCR " + r, defaultInstructionLen
 	}
 }
 
@@ -311,7 +311,7 @@ func mvi(r string) disassembler {
 }
 
 func rlc(rb []byte, pc int64) (string, int64) {
-	return "RLC", defaultOpBytes
+	return "RLC", defaultInstructionLen
 }
 
 func jmp(rb []byte, pc int64) (string, int64) {
@@ -320,46 +320,46 @@ func jmp(rb []byte, pc int64) (string, int64) {
 
 func push(r string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return "PUSH " + r, defaultOpBytes
+		return "PUSH " + r, defaultInstructionLen
 	}
 }
 
 func ignore(rb []byte, pc int64) (string, int64) {
-	return "-", defaultOpBytes
+	return "-", defaultInstructionLen
 }
 
 func dad(r string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return "DAD " + r, defaultOpBytes
+		return "DAD " + r, defaultInstructionLen
 	}
 }
 
 func ldax(r string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return "LDAX " + r, defaultOpBytes
+		return "LDAX " + r, defaultInstructionLen
 	}
 }
 
 func dcx(r string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return "DCX " + r, defaultOpBytes
+		return "DCX " + r, defaultInstructionLen
 	}
 }
 
 func rrc(rb []byte, pc int64) (string, int64) {
-	return "RRC", defaultOpBytes
+	return "RRC", defaultInstructionLen
 }
 
 func ral(rb []byte, pc int64) (string, int64) {
-	return "RAL", defaultOpBytes
+	return "RAL", defaultInstructionLen
 }
 
 func rar(rb []byte, pc int64) (string, int64) {
-	return "RAR", defaultOpBytes
+	return "RAR", defaultInstructionLen
 }
 
 func rim(rb []byte, pc int64) (string, int64) {
-	return "RIM", defaultOpBytes
+	return "RIM", defaultInstructionLen
 }
 
 func shld(rb []byte, pc int64) (string, int64) {
@@ -367,7 +367,7 @@ func shld(rb []byte, pc int64) (string, int64) {
 }
 
 func daa(rb []byte, pc int64) (string, int64) {
-	return "DAA", defaultOpBytes
+	return "DAA", defaultInstructionLen
 }
 
 func lhld(rb []byte, pc int64) (string, int64) {
@@ -375,11 +375,11 @@ func lhld(rb []byte, pc int64) (string, int64) {
 }
 
 func cma(rb []byte, pc int64) (string, int64) {
-	return "CMA", defaultOpBytes
+	return "CMA", defaultInstructionLen
 }
 
 func sim(rb []byte, pc int64) (string, int64) {
-	return "SIM", defaultOpBytes
+	return "SIM", defaultInstructionLen
 }
 
 func sta(rb []byte, pc int64) (string, int64) {
@@ -387,7 +387,7 @@ func sta(rb []byte, pc int64) (string, int64) {
 }
 
 func stc(rb []byte, pc int64) (string, int64) {
-	return "STC", defaultOpBytes
+	return "STC", defaultInstructionLen
 }
 
 func lda(rb []byte, pc int64) (string, int64) {
@@ -395,74 +395,74 @@ func lda(rb []byte, pc int64) (string, int64) {
 }
 
 func cmc(rb []byte, pc int64) (string, int64) {
-	return "CMC", defaultOpBytes
+	return "CMC", defaultInstructionLen
 }
 
 func mov(dst, src string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return fmt.Sprintf("MOV %s,%s", dst, src), defaultOpBytes
+		return fmt.Sprintf("MOV %s,%s", dst, src), defaultInstructionLen
 	}
 }
 
 func hlt(rb []byte, pc int64) (string, int64) {
-	return "HLT", defaultOpBytes
+	return "HLT", defaultInstructionLen
 }
 
 func add(r string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return "ADD " + r, defaultOpBytes
+		return "ADD " + r, defaultInstructionLen
 	}
 }
 
 func adc(r string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return "ADC " + r, defaultOpBytes
+		return "ADC " + r, defaultInstructionLen
 	}
 }
 
 func sub(r string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return "SUB " + r, defaultOpBytes
+		return "SUB " + r, defaultInstructionLen
 	}
 }
 
 func sbb(r string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return "SBB " + r, defaultOpBytes
+		return "SBB " + r, defaultInstructionLen
 	}
 }
 
 func ana(r string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return "ANA " + r, defaultOpBytes
+		return "ANA " + r, defaultInstructionLen
 	}
 }
 
 func xra(r string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return "XRA " + r, defaultOpBytes
+		return "XRA " + r, defaultInstructionLen
 	}
 }
 
 func ora(r string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return "ORA " + r, defaultOpBytes
+		return "ORA " + r, defaultInstructionLen
 	}
 }
 
 func cmp(r string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return "CMP " + r, defaultOpBytes
+		return "CMP " + r, defaultInstructionLen
 	}
 }
 
 func rnz(rb []byte, pc int64) (string, int64) {
-	return "RNZ", defaultOpBytes
+	return "RNZ", defaultInstructionLen
 }
 
 func pop(r string) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return "POP " + r, defaultOpBytes
+		return "POP " + r, defaultInstructionLen
 	}
 }
 
@@ -480,16 +480,16 @@ func adi(rb []byte, pc int64) (string, int64) {
 
 func rst(i int) disassembler {
 	return func(rb []byte, pc int64) (string, int64) {
-		return fmt.Sprintf("RST %d", i), defaultOpBytes
+		return fmt.Sprintf("RST %d", i), defaultInstructionLen
 	}
 }
 
 func rz(rb []byte, pc int64) (string, int64) {
-	return "RZ", defaultOpBytes
+	return "RZ", defaultInstructionLen
 }
 
 func ret(rb []byte, pc int64) (string, int64) {
-	return "RET", defaultOpBytes
+	return "RET", defaultInstructionLen
 }
 
 func jz(rb []byte, pc int64) (string, int64) {
@@ -509,7 +509,7 @@ func aci(rb []byte, pc int64) (string, int64) {
 }
 
 func rnc(rb []byte, pc int64) (string, int64) {
-	return "RNC", defaultOpBytes
+	return "RNC", defaultInstructionLen
 }
 
 func jnc(rb []byte, pc int64) (string, int64) {
@@ -529,7 +529,7 @@ func sui(rb []byte, pc int64) (string, int64) {
 }
 
 func rc(rb []byte, pc int64) (string, int64) {
-	return "RC", defaultOpBytes
+	return "RC", defaultInstructionLen
 }
 
 func jc(rb []byte, pc int64) (string, int64) {
@@ -549,7 +549,7 @@ func sbi(rb []byte, pc int64) (string, int64) {
 }
 
 func rpo(rb []byte, pc int64) (string, int64) {
-	return "RPO", defaultOpBytes
+	return "RPO", defaultInstructionLen
 }
 
 func jpo(rb []byte, pc int64) (string, int64) {
@@ -557,7 +557,7 @@ func jpo(rb []byte, pc int64) (string, int64) {
 }
 
 func xthl(rb []byte, pc int64) (string, int64) {
-	return "XTHL", defaultOpBytes
+	return "XTHL", defaultInstructionLen
 }
 
 func cpo(rb []byte, pc int64) (string, int64) {
@@ -569,11 +569,11 @@ func ani(rb []byte, pc int64) (string, int64) {
 }
 
 func rpe(rb []byte, pc int64) (string, int64) {
-	return "RPE", defaultOpBytes
+	return "RPE", defaultInstructionLen
 }
 
 func pchl(rb []byte, pc int64) (string, int64) {
-	return "PCHL", defaultOpBytes
+	return "PCHL", defaultInstructionLen
 }
 
 func jpe(rb []byte, pc int64) (string, int64) {
@@ -581,7 +581,7 @@ func jpe(rb []byte, pc int64) (string, int64) {
 }
 
 func xchg(rb []byte, pc int64) (string, int64) {
-	return "XCHG", defaultOpBytes
+	return "XCHG", defaultInstructionLen
 }
 
 func cpe(rb []byte, pc int64) (string, int64) {
@@ -593,7 +593,7 @@ func xri(rb []byte, pc int64) (string, int64) {
 }
 
 func rp(rb []byte, pc int64) (string, int64) {
-	return "RP", defaultOpBytes
+	return "RP", defaultInstructionLen
 }
 
 func jp(rb []byte, pc int64) (string, int64) {
@@ -601,7 +601,7 @@ func jp(rb []byte, pc int64) (string, int64) {
 }
 
 func di(rb []byte, pc int64) (string, int64) {
-	return "DI", defaultOpBytes
+	return "DI", defaultInstructionLen
 }
 
 func cp(rb []byte, pc int64) (string, int64) {
@@ -613,11 +613,11 @@ func ori(rb []byte, pc int64) (string, int64) {
 }
 
 func rm(rb []byte, pc int64) (string, int64) {
-	return "RM", defaultOpBytes
+	return "RM", defaultInstructionLen
 }
 
 func sphl(rb []byte, pc int64) (string, int64) {
-	return "SPHL", defaultOpBytes
+	return "SPHL", defaultInstructionLen
 }
 
 func jm(rb []byte, pc int64) (string, int64) {
@@ -625,7 +625,7 @@ func jm(rb []byte, pc int64) (string, int64) {
 }
 
 func ei(rb []byte, pc int64) (string, int64) {
-	return "EI", defaultOpBytes
+	return "EI", defaultInstructionLen
 }
 
 func cm(rb []byte, pc int64) (string, int64) {
