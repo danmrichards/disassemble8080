@@ -1,4 +1,4 @@
-package cpu
+package dasm
 
 import "fmt"
 

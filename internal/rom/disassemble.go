@@ -3,14 +3,14 @@ package rom
 import (
 	"fmt"
 
-	"github.com/danmrichards/disassemble8080/internal/cpu"
+	"github.com/danmrichards/disassemble8080/pkg/dasm"
 )
 
 // Disassemble iterates over the given ROM bytes and prints out the resulting assembly code.
 func Disassemble(rb []byte) {
 	var pc int64
 	for pc < int64(len(rb)) {
-		asm, opb := cpu.Op(rb, pc)
+		asm, opb := dasm.Disassemble(rb, pc)
 
 		fmt.Println(asm)
 

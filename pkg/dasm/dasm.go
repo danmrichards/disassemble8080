@@ -1,16 +1,16 @@
-package cpu
+package dasm
 
 import (
 	"fmt"
 	"strings"
 )
 
-// Op returns a string representing the assembler for the current opcode and the
-// number of bytes the op takes.
+// Disassemble returns a string representing the assembler for the current
+// opcode and the number of bytes the op takes.
 //
 // The opcode is determined by reading the bytes indicated by the given program
 // counter from the given rom bytes.
-func Op(rb []byte, pc int64) (string, int64) {
+func Disassemble(rb []byte, pc int64) (string, int64) {
 	// Get the opcode.
 	opc := rb[pc]
 
