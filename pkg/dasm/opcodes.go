@@ -44,7 +44,7 @@ var disassemblers = map[byte]disassembler{
 	0x1d: dcr("E"),
 	0x1e: mvi("E"),
 	0x1f: rar,
-	0x20: rim,
+	0x20: ignore,
 	0x21: lxi("H"),
 	0x22: shld,
 	0x23: inx("H"),
@@ -356,10 +356,6 @@ func ral(rb []byte, pc int64) (string, int64) {
 
 func rar(rb []byte, pc int64) (string, int64) {
 	return "RAR", defaultInstructionLen
-}
-
-func rim(rb []byte, pc int64) (string, int64) {
-	return "RIM", defaultInstructionLen
 }
 
 func shld(rb []byte, pc int64) (string, int64) {
