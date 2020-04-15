@@ -60,7 +60,7 @@ var disassemblers = map[byte]disassembler{
 	0x2d: dcr("L"),
 	0x2e: mvi("L"),
 	0x2f: cma,
-	0x30: sim,
+	0x30: ignore,
 	0x31: lxi("SP"),
 	0x32: sta,
 	0x33: inx("SP"),
@@ -372,10 +372,6 @@ func lhld(rb []byte, pc int64) (string, int64) {
 
 func cma(rb []byte, pc int64) (string, int64) {
 	return "CMA", defaultInstructionLen
-}
-
-func sim(rb []byte, pc int64) (string, int64) {
-	return "SIM", defaultInstructionLen
 }
 
 func sta(rb []byte, pc int64) (string, int64) {
